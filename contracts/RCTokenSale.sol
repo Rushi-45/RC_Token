@@ -11,7 +11,8 @@ contract RCTokenSale {
     event Sell(address _buyer, uint256 _amount);
 
     constructor(RCToken _tokenContract, uint256 _tokenPrice) {
-        admin = msg.sender; // assign an admin
+        admin = payable(msg.sender); // assign an admin
+        // admin = msg.sender; // assign an admin
         tokenContract = _tokenContract; // token contract
         tokenPrice = _tokenPrice; // token price
     }
