@@ -2,7 +2,7 @@ pragma solidity ^0.8.7;
 
 import "./RCToken.sol";
 
-contract AdaTokenSale {
+contract RCTokenSale {
     address payable admin;
     RCToken public tokenContract;
     uint256 public tokenPrice;
@@ -10,7 +10,7 @@ contract AdaTokenSale {
 
     event Sell(address _buyer, uint256 _amount);
 
-    constructor(RCToken _tokenContract, uint256 _tokenPrice) public {
+    constructor(RCToken _tokenContract, uint256 _tokenPrice) {
         admin = msg.sender; // assign an admin
         tokenContract = _tokenContract; // token contract
         tokenPrice = _tokenPrice; // token price

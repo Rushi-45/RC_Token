@@ -21,18 +21,18 @@ App = {
         return App.initContracts();
     },
     initContracts: function () {
-        $.getJSON("AdaTokenSale.json", function (AdaTokenSale) {
-            App.contracts.AdaTokenSale = TruffleContract(AdaTokenSale);
-            App.contracts.AdaTokenSale.setProvider(App.web3Provider);
-            App.contracts.AdaTokenSale.deployed().then(function (AdaTokenSale) {
-                console.log("Ada Token Sale Address:", AdaTokenSale.address);
+        $.getJSON("RCTokenSale.json", function (RCTokenSale) {
+            App.contracts.RCTokenSale = TruffleContract(RCTokenSale);
+            App.contracts.RCTokenSale.setProvider(App.web3Provider);
+            App.contracts.RCTokenSale.deployed().then(function (RCTokenSale) {
+                console.log("RC Token Sale Address:", RCTokenSale.address);
             });
         }).done(function () {
-            $.getJSON("AdaToken.json", function (AdaToken) {
-                App.contracts.AdaToken = TruffleContract(AdaToken);
-                App.contracts.AdaToken.setProvider(App.web3Provider);
-                App.contracts.AdaToken.deployed().then(function (AdaToken) {
-                    console.log("Ada Token Address:", AdaToken.address);
+            $.getJSON("RCToken.json", function (RCToken) {
+                App.contracts.RCToken = TruffleContract(RCToken);
+                App.contracts.RCToken.setProvider(App.web3Provider);
+                App.contracts.RCToken.deployed().then(function (RCToken) {
+                    console.log("RC Token Address:", RCToken.address);
                 });
                 App.listenForEvents();
                 return App.render();
@@ -58,13 +58,13 @@ App = {
         });
 
         // Load token sale contract
-        App.contracts.AdaTokenSale.deployed().then(function (instance) {
-            AdaTokenSaleInstance = instance;
-            return AdaTokenSaleInstance.tokenPrice();
+        App.contracts.RCTokenSale.deployed().then(function (instance) {
+            RCTokenSaleInstance = instance;
+            return RCTokenSaleInstance.tokenPrice();
         }).then(function (tokenPrice) {
             App.tokenPrice = tokenPrice;
             $('.token-price').html(web3.fromWei(App.tokenPrice, "ether").toNumber());
-            return AdaTokenSaleInstance.tokensSold();
+            return RCTokenSaleInstance.tokensSold();
         }).then(function (tokensSold) {
             App.tokensSold = tokensSold.toNumber();
             $('.tokens-sold').html(App.tokensSold);
@@ -73,11 +73,11 @@ App = {
             var progressPercent = (Math.ceil(App.tokensSold) / App.tokensAvailable) * 100;
             $('#progress').css('width', progressPercent + '%');
 
-            App.contracts.AdaToken.deployed().then(function (instance) {
-                AdaTokenInstance = instance;
-                return AdaTokenInstance.balanceOf(App.account);
+            App.contracts.RCToken.deployed().then(function (instance) {
+                RCTokenInstance = instance;
+                return RCTokenInstance.balanceOf(App.account);
             }).then(function (balance) {
-                $('.ada-balance').html(balance.toNumber());
+                $('.rc-balance').html(balance.toNumber());
                 App.loading = false;
                 loader.hide();
                 content.show();
@@ -87,7 +87,7 @@ App = {
     },
 
     listenForEvents: function () {
-        App.contracts.AdaTokenSale.deployed().then(function (instance) {
+        App.contracts.RCTokenSale.deployed().then(function (instance) {
             instance.Sell({}, {
                 fromBlock: 0,
                 toBlock: 'latest',
@@ -101,7 +101,7 @@ App = {
         $('#content').hide();
         $('#loader').show();
         var numberOfTokens = $('#numberOfTokens').val();
-        App.contracts.AdaTokenSale.deployed().then(function (instance) {
+        App.contracts.RCTokenSale.deployed().then(function (instance) {
             return instance.buyTokens(numberOfTokens, {
                 from: App.account,
                 value: numberOfTokens * App.tokenPrice,

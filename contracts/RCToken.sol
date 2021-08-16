@@ -17,7 +17,7 @@ contract RCToken {
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
-    constructor(uint256 _initialSupply) public {
+    constructor(uint256 _initialSupply) {
         balanceOf[msg.sender] = _initialSupply; // Key value
         totalSupply = _initialSupply;
     }
